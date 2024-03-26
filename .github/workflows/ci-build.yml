@@ -4,17 +4,9 @@
 name: CI-Build
 
 on:
-  push:
-    branches:
-      - main
-      - release-*
-  pull_request:
-    branches:
-      - main
-      - release-*
-
-env:
-  PYTHON_VERSION: "3.10"
+  release:
+    types:
+      - published
 
 jobs:
   build-docker-images:
@@ -25,7 +17,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: $PYTHON_VERSION
+          python-version: "3.10"
           # Optional - x64 or x86 architecture, defaults to x64
           architecture: 'x64'
           
@@ -38,14 +30,22 @@ jobs:
       - name: Docker Login
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
         with:
-          registry: ${{ secrets.DOCKER_REGISTRY }}
           username: ${{ secrets.REG_USER }}
           password: ${{ secrets.REG_PASSWD }}
-
+        
+      - name: Get Version
+        id: pversion
+        run: |
+          if [[ "${{ github.ref_name }}" =~ ^[.\|v][0-9]{1,}.[0-9]{1,}[.\|-][0-9]{1,} ]];then
+            VERSION=${{ github.ref_name }}
+          else
+            VERSION="latest"
+          fi
+          echo "git_revision=$VERSION" >> $GITHUB_OUTPUT
+        
       - name: Build Images
-        run: make docker-build IMG_REGISTRY=${{ secrets.DOCKER_REGISTRY }} VERSION=${{ github.ref_name }}
+        id: build
+        run: make docker-build IMG_REGISTRY=${{ secrets.CONTAINER_REGISTRY }} VERSION=${{ steps.pversion.outputs.git_revision }}
 
       - name: Push Images
-        run: make docker-build IMG_REGISTRY=${{ secrets.DOCKER_REGISTRY }} VERSION=${{ github.ref_name }}
-
-
+        run: make docker-push IMG_REGISTRY=${{ secrets.CONTAINER_REGISTRY }} VERSION=${{ steps.pversion.outputs.git_revision }}

@@ -8,13 +8,10 @@ ENV PATH="${VIRTUAL_ENV}/bin:$PATH"
 
 # Install Python dependencies
 COPY docker/python/requirements.txt .
-COPY docker/python/pip-linktime.conf /tmp/pip.conf
 COPY docker/bin/entrypoint.sh .
 #COPY version.py .
 COPY kdp_catalog_manager kdp_catalog_manager/
-RUN mkdir -p /root/.pip  \
-    && mv /tmp/pip.conf /root/.pip/pip.conf \
-    && ${VIRTUAL_ENV}/bin/pip3 install --no-cache-dir --upgrade pip setuptools Cython==3.0.8 \
+RUN ${VIRTUAL_ENV}/bin/pip3 install --no-cache-dir --upgrade pip setuptools Cython==3.0.8 \
     && ${VIRTUAL_ENV}/bin/pip3 install --no-cache-dir --upgrade --force-reinstall -r requirements.txt \
     && rm -f requirements.txt \
     && cd kdp_catalog_manager && python setup.py build_ext --inplace  \
@@ -32,9 +29,7 @@ ENV BDOS_USER_HOME=${BDOS_USER_HOME:-/home/${BDOS_USER}}
 
 WORKDIR ${RUNTIME_HOME}
 
-RUN echo "deb http://mirrors.aliyun.com/debian/ buster main non-free contrib" > /etc/apt/sources.list \
-    && sed -i "s@http://deb.debian.org@http://mirrors.aliyun.com@g" /etc/apt/sources.list  \
-    && apt-get update \
+RUN apt-get update \
     && apt-get -y install sudo \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
@@ -54,5 +49,4 @@ COPY --chown=${BDOS_USER}:${BDOS_USER} --from=builder /workspace .
 COPY --chown=${BDOS_USER}:${BDOS_USER} --from=builder /opt/venv /opt/venv
 
 USER ${BDOS_USER}
-ENV SERVER_MODE=${SERVER_MODE:-prod}
 CMD ["/bin/sh", "-c", "${RUNTIME_HOME}/entrypoint.sh"]

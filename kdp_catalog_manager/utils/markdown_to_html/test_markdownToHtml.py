@@ -35,3 +35,6 @@ class TestMarkdownToHtlm(TestCase):
     def test_mutate_markdown_data(self):
         rt = MarkdownToHtlm().mutate_markdown_data(self.markdown_file)
         self.assertEqual(rt, '<h1>desc</h1>')
+
+    def tearDown(self):
+        os.remove(self.markdown_file)

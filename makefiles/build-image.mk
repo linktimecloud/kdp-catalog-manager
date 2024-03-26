@@ -1,5 +1,5 @@
 # Docker image info
-IMG			   ?= kdp-catalog-manager:$(VERSION)
+IMG			   ?= linktimecloud/kdp-catalog-manager:$(VERSION)
 IMG_REGISTRY   ?= ""
 
 .PHONY: set-build-info
@@ -12,7 +12,7 @@ docker-build: docker-build-image
 
 .PHONY: docker-build-image
 docker-build-image:
-	docker build --build-arg ARTIFACTS_SERVER=$(ARTIFACTS_SERVER) -t $(IMG_REGISTRY)/$(IMG) -f slim.Dockerfile .
+	docker build -t $(IMG_REGISTRY)/$(IMG) -f Dockerfile .
 
 .PHONY: docker-push
 docker-push: docker-push-image
