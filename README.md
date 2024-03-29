@@ -1,7 +1,11 @@
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)  
+![Tests](https://github.com/linktimecloud/kdp-catalog-manager/actions/workflows/unit-test.yml/badge.svg)
+![Build](https://github.com/linktimecloud/kdp-catalog-manager/actions/workflows/ci-build.yml/badge.svg)  
 ![](https://img.shields.io/badge/python-3.10.13-green)
 ![](https://img.shields.io/badge/fastapi-0.110.0-green)  
 ![image version](https://img.shields.io/docker/v/linktimecloud/kdp-catalog-manager)
 ![image size](https://img.shields.io/docker/image-size/linktimecloud/kdp-catalog-manager)
+
 
 # KDP Catalog Manager
 
