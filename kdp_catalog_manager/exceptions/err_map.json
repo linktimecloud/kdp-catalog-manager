@@ -1,0 +1,50 @@
+{
+  "KdpCatalogManagerError": {
+    "code": 100000,
+    "error-name": "KdpCatalogManagerError",
+    "description": "",
+    "solution": "请查看日志获取更多错误详情",
+    "manual": "",
+    "app": "KDP-Catalog-Manager"
+  },
+  "LoadJSONFileError": {
+    "code": 100001,
+    "error-name": "LoadJSONFileError",
+    "description": "读取的{name} 配置文件内容不是合法的JSON格式",
+    "solution": "检查文件内容",
+    "manual": "",
+    "app": ""
+  },
+  "LangNotSupport":{
+    "code": 300001,
+    "error-name": "LangNotSupport",
+    "description": "语言不支持",
+    "solution": "请传输正确语言参数",
+    "manual": "",
+    "app": ""
+  },
+  "CatalogFormMatchError": {
+    "code": 300001,
+    "error-name": "CatalogFormMatchError",
+    "description": "catalog 与from 不匹配",
+    "solution": "检查查询参数是否正确",
+    "manual": "",
+    "app": ""
+  },
+  "CacheOperatorError": {
+    "code": 100101,
+    "error-name": "CacheOperatorError",
+    "description": "缓存操作失败: {name}",
+    "solution": "检查应用缓存数据或重启应用",
+    "manual": "",
+    "app": ""
+  },
+  "DataTypeError": {
+    "code": 100201,
+    "error-name": "DataTypeError",
+    "description": "缓存操作失败: {name}",
+    "solution": "检查应用缓存数据或重启应用",
+    "manual": "",
+    "app": ""
+  }
+}
