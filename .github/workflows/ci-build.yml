@@ -4,43 +4,45 @@
 name: CI-Build
 
 on:
-  push:
-    branches:
-      - main
-      - release-*
-  pull_request:
-    branches:
-      - main
-      - release-*
+  release:
+    types:
+      - published
 
 jobs:
   build-docker-images:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: 'pip' # caching pip dependencies
+      - run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov
+          if [ -f docker/python/requirements.txt ]; then pip install -r docker/python/requirements.txt; fi
 
-      - name: Get the version
-        id: get_version
+      - name: Docker Login
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          username: ${{ secrets.REG_USER }}
+          password: ${{ secrets.REG_PASSWD }}
+        
+      - name: Get Version
+        id: pversion
         run: |
-          VERSION=${GITHUB_REF#refs/tags/}
-          echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+          if [[ "${{ github.ref_name }}" =~ ^[.\|v][0-9]{1,}.[0-9]{1,}[.\|-][0-9]{1,} ]];then
+            VERSION=${{ github.ref_name }}
+          else
+            VERSION="latest"
+          fi
+          echo "git_revision=$VERSION" >> $GITHUB_OUTPUT
+        
+      - name: Build Images
+        id: build
+        run: make docker-build IMG_REGISTRY=${{ secrets.CONTAINER_REGISTRY }} VERSION=${{ steps.pversion.outputs.git_revision }}
 
-      - name: Get image registry
-        id: get_image_registry
-        run: |
-          echo "IMG_REGISTRY=${{ secrets.NX_ALIYUN_REGISTRY }}" >> $GITHUB_OUTPUT
-
-#      - name: Docker Login
-#        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
-#        with:
-#          registry: ${{ secrets.NX_ALIYUN_REGISTRY }}
-#          username: ${{ secrets.NX_ALIYUN_USERNAME }}
-#          password: ${{ secrets.NX_ALIYUN_PASSWORD }}
-
-#      - name: Build Images
-#        run: make docker-build-apiserver IMG_REGISTRY=${{ steps.get_image_registry.outputs.IMG_REGISTRY }} VERSION=${{ steps.get_version.outputs.VERSION }}
-#
-#      - name: Push Images
-#        run: make docker-push-apiserver IMG_REGISTRY=${{ steps.get_image_registry.outputs.IMG_REGISTRY }} VERSION=${{ steps.get_version.outputs.VERSION }}
-
-
+      - name: Push Images
+        run: make docker-push IMG_REGISTRY=${{ secrets.CONTAINER_REGISTRY }} VERSION=${{ steps.pversion.outputs.git_revision }}
