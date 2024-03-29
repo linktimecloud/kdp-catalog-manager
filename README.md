@@ -1,3 +1,8 @@
+![](https://img.shields.io/badge/python-3.10.13-green)
+![](https://img.shields.io/badge/fastapi-0.110.0-green)  
+![image version](https://img.shields.io/docker/v/linktimecloud/kdp-catalog-manager)
+![image size](https://img.shields.io/docker/image-size/linktimecloud/kdp-catalog-manager)
+
 # KDP Catalog Manager
 
 ## 项目描述
