@@ -6,19 +6,23 @@
 
 version: 2
 updates:
-  - package-ecosystem: "gomod" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "Chore: "
-      include: "scope"
-    ignore:
-      - dependency-name: k8s.io/*
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+      time: "1"
     commit-message:
       prefix: "Chore: "
-      include: "scope"      
+      include: "scope"
+  - package-ecosystem: "pip" # See documentation for possible values
+    directory: "/docker/python" # Location of package manifests
+    schedule:
+      interval: "weekly"
+    groups:
+      python-packages:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "Chore: "
+      include: "scope"
+  
