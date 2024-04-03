@@ -9,47 +9,39 @@
 
 # KDP Catalog Manager
 
-English | [简体中文](./README_zh.md)
-<br>
+## 项目描述
 
-## Project Description
+### 项目概述
+KDP Catalog Manager是一套大数据应用管理平台。基于应用功能进行分类查看、管理，降低应用管理的复杂度，从而使大数据管理人员更专注于数据的处理
 
-### Project Overview
-KDP Catalog Manager is a big data application management platform. It categorizes and manages applications based on their functionalities, reducing the complexity of application management and allowing big data administrators to focus more on data processing.
-
-### Core Technical Architecture
+### 核心技术架构
 ![kdp-catalog-manager](kdp-catalog-manager.png)
 
 
 
-### Functional Module Description
+### 功能模块描述
 
 #### api
 * view  
-Defines Restful APIs and performs basic validation on user input parameters and output results.
+定义 Restful API 并对用户输入参数执行基本验证及结果输出
 
 #### Domain
-
 * service  
-Business logic.
-
+业务逻辑
 * format  
-Data conversion layer, used for transforming data between cached data and business data.
-
+数据转换层，用于缓存数据与业务数据转换
 * model  
-Data model entities.
-
+数据模型实体
 
 
 ##### Modules
 * cache  
-Data storage layer, where static data is stored in the cache.
-
+数据存储层，静态数据存储于缓存中
 * requests  
-External data invocation, used to call external services to retrieve data.
+外部数据调用，调用外部服务获取数据
 
 
-## Directory Structure
+## 目录结构
 ```shell
 ├── CODEOWNERS
 ├── README.md
@@ -65,36 +57,34 @@ External data invocation, used to call external services to retrieve data.
    └── utils
 ```
 
-## Startup Procedure
+## 启动方式
 
-### Development Environment Setup
+### 开发环境搭建
+* 使用python3.10+
 
-* Requires Python3.10+
-
-
-1. Clone the code to your local machine.
+1. 克隆代码至本地
 ```shell
 git clone xxx && cd kdp-catalog-manager
 ```
 
-2. Set up a virtual environment:
+2. 使用虚拟环境
 ```shell
-#Install virtualenv
+#安装virtualenv
 pip install virtualenv
 virtualenv -p /usr/local/bin/python3 venv
-# Activate the virtual environment:
+# 激活虚拟环境
 source ./venv/bin/activate
 
-# Deactivate the virtual environment:
+# 关闭虚拟环境
 deactivate
 ```
 
-3. Install dependencies:
+3. 安装依赖
 ```shell
 pip install -r docker/python/requirements.txt
 ```
 
-4. Start the service:
+4. 服务启动
 ```shell
 cd ~/kdp-catalog-manager \
 && export PYTHONPATH=$PYTHONPATH:$(pwd)
@@ -102,5 +92,5 @@ python kdp_catalog_manager/main.py
 
 ```
 
-### API Manual
-* After starting the service, you can view the list of available endpoints by accessing http://127.0.0.1:8000/docs.
+### API 手册
+* 启动服务后通过 http://127.0.0.1:8000/docs 查看提供的接口列表
