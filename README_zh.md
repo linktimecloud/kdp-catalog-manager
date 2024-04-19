@@ -93,4 +93,4 @@ python kdp_catalog_manager/main.py
 ```
 
 ### API 手册
-* 启动服务后通过 http://127.0.0.1:8000/docs 查看提供的接口列表
+* 启动服务后通过 http://127.0.0.1:8888/docs 查看提供的接口列表

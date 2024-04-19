@@ -103,4 +103,4 @@ python kdp_catalog_manager/main.py
 ```
 
 ### API Manual
-* After starting the service, you can view the list of available endpoints by accessing http://127.0.0.1:8000/docs.
+* After starting the service, you can view the list of available endpoints by accessing http://127.0.0.1:8888/docs.
