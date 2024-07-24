@@ -31,7 +31,8 @@ class CatalogController(object):
             catalogs_info[catalog] = {
                 "name": catalog_format_obj.get_name(),
                 "description": catalog_format_obj.get_description(self.lang),
-                "category": catalog_format_obj.get_category(self.lang)
+                "category": catalog_format_obj.get_category(self.lang),
+                "global": catalog_format_obj.get_global()
             }
         return catalogs_info
 
@@ -60,3 +61,24 @@ class CatalogController(object):
             README_HTML
         )
         return FileUtils().read_file(catalog_file)
+
+    def get_catalog_category(self):
+        catalog_category = {}
+        catalogs_info = self.get_catalogs_info()
+        for catalog, catalog_info in catalogs_info.items():
+            category = catalog_info.get('category')
+            if category not in catalog_category:
+                catalog_category[category] = [catalog]
+                continue
+            if category in catalog_category:
+                catalog_category[category].append(catalog)
+        return catalog_category
+
+    def get_catalog_global(self):
+        catalog_global_list = []
+        catalogs_info = self.get_catalogs_info()
+        for catalog, catalog_info in catalogs_info.items():
+            global_catalog = catalog_info.get('global')
+            if global_catalog:
+                catalog_global_list.append(catalog)
+        return catalog_global_list

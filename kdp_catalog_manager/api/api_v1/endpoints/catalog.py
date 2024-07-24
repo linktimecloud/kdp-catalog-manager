@@ -9,7 +9,7 @@ from kdp_catalog_manager.common.constants import CATALOG_DESC, \
     NOT_FOUND_README_HTML
 from kdp_catalog_manager.config.base_config import DEFAULT_LANG, SUPPORT_LANG
 from kdp_catalog_manager.domain.model.catalog import CatalogList, \
-    CatalogDataOut
+    CatalogDataOut, CatalogCategory, Catalogglobal
 from kdp_catalog_manager.domain.service.catalog import CatalogController
 from kdp_catalog_manager.exceptions.exception import KdpCatalogManagerError, \
     FileNotExistsError, LangNotSupport
@@ -97,4 +97,54 @@ async def read_catalog_readme(
     except LangNotSupport:
         response.status_code = status.HTTP_400_BAD_REQUEST
         rtn = "语言不支持:Header Accept-Language is:ens, not in ['zh', 'en']"
+    return rtn
+
+
+@router.get("/catalogs/category/info",
+            response_model=CatalogCategory,
+            summary="获取应用目录归类列表",
+            description="获取应用目录归类列表")
+def read_catalog_category(
+    accept_language: Annotated[str, Header(description="请求语言类型")] = DEFAULT_LANG
+):
+    """获取catalog归类"""
+    try:
+        if accept_language not in SUPPORT_LANG:
+            raise LangNotSupport(
+                f"Header Accept-Language is:{accept_language}, "
+                f"not in {SUPPORT_LANG}")
+        data = CatalogController(lang=accept_language).get_catalog_category()
+        rtn = FormatReturn().format_return_json(
+            data, msg="get catalogs category data success")
+    except KdpCatalogManagerError as error:
+        error_info = FormatReturn().format_error_info(
+            error.error_name,
+            error.error_details,
+            error_msg=error.error_cname
+        )
+        rtn = FormatReturn().format_return_json(
+            {}, status=1, msg=error.error_cname, error_info=error_info)
+    return rtn
+
+
+@router.get("/catalogs/global/info",
+            response_model=Catalogglobal,
+            summary="获取全局应用目录列表",
+            description="获取全局应用目录列表")
+def read_catalog_global(
+    accept_language: Annotated[str, Header(description="请求语言类型")] = DEFAULT_LANG
+):
+    """获取全局catalog"""
+    try:
+        data = CatalogController(lang=accept_language).get_catalog_global()
+        rtn = FormatReturn().format_return_json(
+            data, msg="get global catalogs data success")
+    except KdpCatalogManagerError as error:
+        error_info = FormatReturn().format_error_info(
+            error.error_name,
+            error.error_details,
+            error_msg=error.error_cname
+        )
+        rtn = FormatReturn().format_return_json(
+            {}, status=1, msg=error.error_cname, error_info=error_info)
     return rtn

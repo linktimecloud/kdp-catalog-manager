@@ -19,3 +19,11 @@ class CatalogDataOut(Response):
 
 class CatalogList(Response):
     data: List[CatalogData] | List
+
+
+class CatalogCategory(Response):
+    data: Dict
+
+
+class Catalogglobal(Response):
+    data: List
