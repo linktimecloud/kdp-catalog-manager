@@ -28,3 +28,6 @@ class FormatCatalog(Format):
 
     def get_global(self):
         return DictUtils().get_items(self.raw, ["isGlobal"], False)
+
+    def get_image(self):
+        return DictUtils().get_items(self.raw, ["image"], "")

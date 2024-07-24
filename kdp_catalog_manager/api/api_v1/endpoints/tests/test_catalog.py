@@ -15,7 +15,7 @@ class TestCatalogApi(TestCase):
         self.client = TestClient(app=app)
         self.catalog_data = {
             "mysql": {
-                "name": "mysql",
+                "name": "Mysql",
                 "category": "系统/大数据开发工具",
                 "description": "mysql",
                 "i18n": {
@@ -144,13 +144,15 @@ class TestCatalogApi(TestCase):
         response = self.client.get("/api/v1/catalogs/category/info")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get("status"), 0)
-        self.assertEqual(response.json().get("data"), {"系统/大数据开发工具": ["mysql"]})
+        self.assertEqual(response.json().get("data"), [
+            {"category": "系统/大数据开发工具", "sub": [{"name": "mysql", "metadataName": "Mysql", "image": ""}]}])
 
     def test_catalog_category1_en(self):
         response = self.client.get("/api/v1/catalogs/category/info", headers={"Accept-Language": "en"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json().get("status"), 0)
-        self.assertEqual(response.json().get("data"), {"system.dataManagement": ["mysql"]})
+        self.assertEqual(response.json().get("data"), [
+            {"category": "system.dataManagement", "sub": [{"name": "mysql", "metadataName": "Mysql", "image": ""}]}])
 
     def test_catalog_global_empty(self):
         response = self.client.get("/api/v1/catalogs/global/info")

@@ -13,6 +13,7 @@ class TestCatalogController(TestCase):
     def setUp(self):
         self.catalog_data = {
             "mysql": {
+                "name": "Mysql",
                 "category": "系统/大数据开发工具",
                 "description": "mysql",
                 "i18n": {
@@ -48,3 +49,15 @@ class TestCatalogController(TestCase):
             CatalogController(lang="zhs").get_catalog_readme()
         except APIRequestedInvalidParamsError:
             self.assertEqual(True, True)
+
+    def test_get_category(self):
+        self.catalog_data["mysql"]["image"] = ""
+        cache_instance.set(CATALOG_KEY, self.catalog_data)
+        rt = CatalogController().get_catalog_category()
+        self.assertEqual(rt, [{"category": "系统/大数据开发工具", "sub": [{"name": "mysql", "metadataName": "Mysql", "image": ""}]}])
+
+    def test_get_category_en(self):
+        self.catalog_data["mysql"]["image"] = ""
+        cache_instance.set(CATALOG_KEY, self.catalog_data)
+        rt = CatalogController(lang="en").get_catalog_category()
+        self.assertEqual(rt, [{"category": "system.dataManagement", "sub": [{"name": "mysql", "metadataName": "Mysql", "image": ""}]}])

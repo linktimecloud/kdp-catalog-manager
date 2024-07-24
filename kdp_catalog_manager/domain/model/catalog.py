@@ -22,7 +22,7 @@ class CatalogList(Response):
 
 
 class CatalogCategory(Response):
-    data: Dict
+    data: List
 
 
 class Catalogglobal(Response):

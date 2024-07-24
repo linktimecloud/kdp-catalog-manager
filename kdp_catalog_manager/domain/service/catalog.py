@@ -63,16 +63,36 @@ class CatalogController(object):
         return FileUtils().read_file(catalog_file)
 
     def get_catalog_category(self):
-        catalog_category = {}
-        catalogs_info = self.get_catalogs_info()
-        for catalog, catalog_info in catalogs_info.items():
-            category = catalog_info.get('category')
-            if category not in catalog_category:
-                catalog_category[category] = [catalog]
+        catalog_info = {}
+        catalogs_data = cache_instance.get(CATALOG_KEY)
+        if not isinstance(catalogs_data, dict):
+            raise DataTypeError(f"data type is {type(catalogs_data)}")
+        for catalog, catalog_metadata_info in catalogs_data.items():
+            catalog_format_obj = FormatCatalog(catalog_metadata_info)
+            catalog_metadata_name = catalog_format_obj.get_name()
+            catalog_category_name = catalog_format_obj.get_category(self.lang)
+            catalog_image = catalog_format_obj.get_image()
+            if catalog_category_name not in catalog_info:
+                catalog_info[catalog_category_name] = [{
+                    "name": catalog,
+                    "metadataName": catalog_metadata_name,
+                    "image": catalog_image
+                }]
                 continue
-            if category in catalog_category:
-                catalog_category[category].append(catalog)
-        return catalog_category
+            if catalog_category_name in catalog_info:
+                catalog_info[catalog_category_name].append({
+                    "name": catalog,
+                    "metadataName": catalog_metadata_name,
+                    "image": catalog_image
+                })
+
+        catalog_categorys = []
+        for category, catalog_metadata_info in catalog_info.items():
+            catalog_categorys.append({
+                "category": category,
+                "sub": catalog_metadata_info
+            })
+        return catalog_categorys
 
     def get_catalog_global(self):
         catalog_global_list = []
