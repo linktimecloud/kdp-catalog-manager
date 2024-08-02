@@ -31,3 +31,6 @@ class FormatCatalog(Format):
 
     def get_image(self):
         return DictUtils().get_items(self.raw, ["image"], "")
+
+    def get_group(self):
+        return DictUtils().get_items(self.raw, ["group"], "BigDataComponent")

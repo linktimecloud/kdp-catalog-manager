@@ -27,3 +27,7 @@ class CatalogCategory(Response):
 
 class Catalogglobal(Response):
     data: List
+
+
+class CatalogGroup(Response):
+    data: List
