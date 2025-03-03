@@ -1,8 +1,8 @@
-fastapi[all]==0.111.0
-uvicorn[standard]==0.30.1
+fastapi[all]==0.115.11
+uvicorn[standard]==0.34.0
 cachelib==0.13.0
 concurrent-log-handler==0.9.25
 cachelib==0.13.0
-markdown==3.6
-prometheus-fastapi-instrumentator==7.0.0
-gunicorn==22.0.0
+markdown==3.7
+prometheus-fastapi-instrumentator==7.0.2
+gunicorn==23.0.0
