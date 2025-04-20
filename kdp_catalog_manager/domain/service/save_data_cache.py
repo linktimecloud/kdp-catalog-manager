@@ -10,6 +10,7 @@ from kdp_catalog_manager.exceptions.exception import CacheOperatorError
 from kdp_catalog_manager.modules.cache.cache import cache_instance
 from kdp_catalog_manager.utils.log import log
 from kdp_catalog_manager.utils.yamlutils import YAMLUtils
+from kdp_catalog_manager.utils.fileutils import FileUtils
 
 
 class SaveDataToCache(object):
@@ -31,6 +32,10 @@ class SaveCatalogDataCache(SaveDataToCache):
                 continue
 
             catalog_metadata = YAMLUtils().load_all_yaml(catalog_metadata_file)
+            # get image base64 data to save cache
+            image_file = os.path.join(CATALOG_DIR, catalog, f"{catalog}.png")
+            image = FileUtils.get_file_base64(image_file)
+            catalog_metadata["image"] = image
             catalog_data[catalog] = catalog_metadata
         rt = self.cache.set(CATALOG_KEY, catalog_data, CACHE_EXPIRE)
         if rt:

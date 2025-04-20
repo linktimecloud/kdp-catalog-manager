@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+import base64
 
 from kdp_catalog_manager.exceptions.exception import FileNotExistsError, \
     ReadFileError, WriteFileError
@@ -39,3 +40,14 @@ class FileUtils(object):
         except Exception as err:
             log.error(str(err))
             raise WriteFileError(target_file)
+
+    @staticmethod
+    def get_file_base64(target_file):
+        encoded_string = ""
+        try:
+            if os.path.exists(target_file):
+                with open(target_file, "rb") as f:
+                    encoded_string = base64.b64encode(f.read()).decode()
+        except Exception as err:
+            log.error(str(err))
+        return encoded_string

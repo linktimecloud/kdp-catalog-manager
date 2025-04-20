@@ -25,3 +25,12 @@ class FormatCatalog(Format):
         if lang == DEFAULT_LANG:
             return DictUtils().get_items(self.raw, ["description"])
         return DictUtils().get_items(self.raw, [I18N, lang, "description"])
+
+    def get_global(self):
+        return DictUtils().get_items(self.raw, ["isGlobal"], False)
+
+    def get_image(self):
+        return DictUtils().get_items(self.raw, ["image"], "")
+
+    def get_group(self):
+        return DictUtils().get_items(self.raw, ["group"], "BigDataComponent")
